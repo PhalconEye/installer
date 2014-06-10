@@ -93,7 +93,8 @@ class Installer extends LibraryInstaller
         if ($type == self::PACKAGE_TYPE_LIBRARY) {
             $name = $package->getPrettyName();
             if (strpos($name, '/') !== false) {
-                $name = end(explode('/', $name));
+                $nameParams = explode('/', $name);
+                $name = end($nameParams);
             }
         } else {
             if (empty($extra['name'])) {
