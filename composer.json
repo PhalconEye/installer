@@ -11,7 +11,7 @@
         "source" : "https://github.com/lantian/PhalconEye"
     },
     "autoload": {
-        "psr-0": { "PhalconEye\\": "PhalconEye/" }
+        "psr-0": { "PhalconEye\\": "src/" }
     },
     "extra": {
         "class": "PhalconEye\\Installer"
