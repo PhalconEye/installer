@@ -1,0 +1,19 @@
+{
+    "name": "phalconeye/composer-installer-plugin",
+    "type": "composer-installer",
+    "description" : "Phalcon Eye - CMS based on Phalcon PHP Framework",
+    "keywords" : [ "phalcon", "php", "cms" ],
+    "homepage" : "http://phalconeye.com",
+    "license" : "BSD-3-Clause",
+    "support" : {
+        "documentation" : "http://docs.phalconeye.com/latest/en/",
+        "forum" : "http://forum.phalconeye.com/",
+        "source" : "https://github.com/lantian/PhalconEye"
+    },
+    "autoload": {
+        "psr-0": { "PhalconEye\\": "PhalconEye/" }
+    },
+    "extra": {
+        "class": "PhalconEye\\Installer"
+    }
+}
