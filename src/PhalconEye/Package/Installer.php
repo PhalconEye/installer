@@ -124,6 +124,6 @@ class Installer extends LibraryInstaller
      */
     public function supports($packageType)
     {
-        return true;
+        return $packageType != 'composer-installer';
     }
 }
