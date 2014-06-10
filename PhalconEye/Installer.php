@@ -16,7 +16,7 @@
   +------------------------------------------------------------------------+
 */
 
-namespace PhalconEye\Installer;
+namespace PhalconEye;
 
 use Composer\Installer\LibraryInstaller;
 use Composer\Package\PackageInterface;
