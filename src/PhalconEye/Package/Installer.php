@@ -60,6 +60,9 @@ class Installer extends LibraryInstaller
          */
         PACKAGE_TYPE_UI_LIBRARY = 'phalconeye-ui-library';
 
+    const
+        CONFIG_EXTRA_UI_LIBRARIES = 'ui-libraries';
+
     /**
      * Get package locations array.
      *
@@ -84,6 +87,20 @@ class Installer extends LibraryInstaller
         $type = $package->getType();
         $locations = $this->getPackageLocations();
         $extra = $package->getExtra();
+
+        // Normal composer package.
+        if (!isset($locations[$type])) {
+            // Check ui libraries.
+            $projectExtra = $this->composer->getPackage()->getExtra();
+            if (
+                isset($projectExtra[self::CONFIG_EXTRA_UI_LIBRARIES]) &&
+                isset($projectExtra[self::CONFIG_EXTRA_UI_LIBRARIES][$package->getPrettyName()])
+            ) {
+                $type = self::PACKAGE_TYPE_UI_LIBRARY;
+            } else {
+                return parent::getInstallPath($package);
+            }
+        }
 
         if (empty($extra['name'])) {
             throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
