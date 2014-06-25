@@ -130,7 +130,6 @@ class Installer extends LibraryInstaller
      */
     public function supports($packageType)
     {
-        $locations = $this->getPackageLocations();
-        return isset($locations[$packageType]);
+        return true;
     }
 }
