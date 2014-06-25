@@ -38,27 +38,27 @@ class Installer extends LibraryInstaller
         /**
          * Module package.
          */
-        PACKAGE_TYPE_MODULE = 'module',
+        PACKAGE_TYPE_MODULE = 'phalconeye-module',
 
         /**
          * Plugin package.
          */
-        PACKAGE_TYPE_PLUGIN = 'plugin',
+        PACKAGE_TYPE_PLUGIN = 'phalconeye-plugin',
 
         /**
          * Theme package.
          */
-        PACKAGE_TYPE_THEME = 'theme',
+        PACKAGE_TYPE_THEME = 'phalconeye-theme',
 
         /**
          * Widget package.
          */
-        PACKAGE_TYPE_WIDGET = 'widget',
+        PACKAGE_TYPE_WIDGET = 'phalconeye-widget',
 
         /**
          * Library package.
          */
-        PACKAGE_TYPE_LIBRARY = 'library';
+        PACKAGE_TYPE_UI_LIBRARY = 'phalconeye-ui-library';
 
     /**
      * Get package locations array.
@@ -71,7 +71,7 @@ class Installer extends LibraryInstaller
             self::PACKAGE_TYPE_MODULE => 'app/modules/',
             self::PACKAGE_TYPE_PLUGIN => 'app/plugins/',
             self::PACKAGE_TYPE_WIDGET => 'app/widgets/',
-            self::PACKAGE_TYPE_LIBRARY => 'app/libraries/',
+            self::PACKAGE_TYPE_UI_LIBRARY => 'public/ui/',
             self::PACKAGE_TYPE_THEME => 'public/themes/'
         ];
     }
@@ -85,23 +85,10 @@ class Installer extends LibraryInstaller
         $locations = $this->getPackageLocations();
         $extra = $package->getExtra();
 
-        // Correct package type.
-        if (empty($locations[$type])) {
-            $type = self::PACKAGE_TYPE_LIBRARY;
+        if (empty($extra['name'])) {
+            throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
         }
-
-        if ($type == self::PACKAGE_TYPE_LIBRARY) {
-            $name = $package->getPrettyName();
-            if (strpos($name, '/') !== false) {
-                $nameParams = explode('/', $name);
-                $name = end($nameParams);
-            }
-        } else {
-            if (empty($extra['name'])) {
-                throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
-            }
-            $name = ucfirst($extra['name']);
-        }
+        $name = ucfirst($extra['name']);
 
         return $locations[$type] . '/' . $name;
     }
@@ -125,6 +112,7 @@ class Installer extends LibraryInstaller
      */
     public function supports($packageType)
     {
-        return $packageType != 'composer-installer';
+        $locations = $this->getPackageLocations();
+        return isset($locations[$packageType]);
     }
 }
