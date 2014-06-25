@@ -110,8 +110,9 @@ class Installer extends LibraryInstaller
             throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
         }
 
+        $name = ucfirst($extra['name']);
         if ($type != self::PACKAGE_TYPE_UI_LIBRARY) {
-            $name = ucfirst($extra['name']);
+            $name = ucfirst($name);
         }
 
         return $locations[$type] . '/' . $name;
