@@ -1,5 +1,5 @@
 {
-    "name": "phalconeye/composer-installer-plugin",
+    "name": "phalconeye/installer",
     "type": "composer-installer",
     "description" : "Phalcon Eye - CMS based on Phalcon PHP Framework",
     "keywords" : [ "phalcon", "php", "cms" ],
