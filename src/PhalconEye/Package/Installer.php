@@ -94,9 +94,10 @@ class Installer extends LibraryInstaller
             $projectExtra = $this->composer->getPackage()->getExtra();
             if (
                 isset($projectExtra[self::CONFIG_EXTRA_UI_LIBRARIES]) &&
-                isset($projectExtra[self::CONFIG_EXTRA_UI_LIBRARIES][$package->getPrettyName()])
+                !empty($projectExtra[self::CONFIG_EXTRA_UI_LIBRARIES][$package->getPrettyName()])
             ) {
                 $type = self::PACKAGE_TYPE_UI_LIBRARY;
+                $extra['name'] = $projectExtra[self::CONFIG_EXTRA_UI_LIBRARIES][$package->getPrettyName()];
             } else {
                 return parent::getInstallPath($package);
             }
