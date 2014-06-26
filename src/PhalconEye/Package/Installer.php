@@ -111,7 +111,10 @@ class Installer extends LibraryInstaller
         }
 
         $name = $extra['name'];
-        if ($type != self::PACKAGE_TYPE_UI_LIBRARY) {
+        if (
+            $type != self::PACKAGE_TYPE_UI_LIBRARY &&
+            $type != self::PACKAGE_TYPE_THEME
+        ) {
             $name = ucfirst($name);
         }
 
