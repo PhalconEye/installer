@@ -5,6 +5,10 @@
     "keywords" : [ "phalcon", "php", "cms" ],
     "homepage" : "http://phalconeye.com",
     "license" : "BSD-3-Clause",
+    "require" : {
+        "php" : ">=5.4.20",
+        "phalconeye/cms": ">=0.5.0"
+    },
     "support" : {
         "documentation" : "http://docs.phalconeye.com/latest/en/",
         "forum" : "http://forum.phalconeye.com/",
@@ -17,3 +21,5 @@
         "class": "PhalconEye\\Package\\Installer"
     }
 }
+
+
