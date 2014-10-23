@@ -12,7 +12,7 @@
     "support" : {
         "documentation" : "http://docs.phalconeye.com/latest/en/",
         "forum" : "http://forum.phalconeye.com/",
-        "source" : "https://github.com/lantian/PhalconEye"
+        "source" : "https://github.com/PhalconEye"
     },
     "autoload": {
         "psr-0": { "PhalconEye\\Package\\": "src/" }

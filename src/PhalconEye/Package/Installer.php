@@ -36,6 +36,11 @@ class Installer extends LibraryInstaller
 {
     const
         /**
+         * The alfa and the omega!
+         */
+        PACKAGE_TYPE_FRAMEWORK = 'phalconeye-framework',
+
+        /**
          * Module package.
          */
         PACKAGE_TYPE_MODULE = 'phalconeye-module',
@@ -74,6 +79,7 @@ class Installer extends LibraryInstaller
     public function getPackageLocations()
     {
         return [
+            self::PACKAGE_TYPE_FRAMEWORK => 'app/engine/',
             self::PACKAGE_TYPE_MODULE => 'app/modules/',
             self::PACKAGE_TYPE_PLUGIN => 'app/plugins/',
             self::PACKAGE_TYPE_WIDGET => 'app/widgets/',
