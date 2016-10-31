@@ -56,44 +56,32 @@ class Installer extends LibraryInstaller
         PACKAGE_TYPE_WIDGET = 'phalconeye-widget';
 
     /**
-     * Get package locations array.
-     *
-     * @return array
+     *  Package locations.
      */
-    public function getPackageLocations()
-    {
-        return [
-            self::PACKAGE_TYPE_MODULE => 'app/modules/',
-            self::PACKAGE_TYPE_PLUGIN => 'app/plugins/',
-            self::PACKAGE_TYPE_WIDGET => 'app/widgets/',
-            self::PACKAGE_TYPE_THEME => 'public/themes/'
-        ];
-    }
+    private $packages = [
+        self::PACKAGE_TYPE_MODULE => 'app/modules/',
+        self::PACKAGE_TYPE_PLUGIN => 'app/plugins/',
+        self::PACKAGE_TYPE_WIDGET => 'app/widgets/',
+        self::PACKAGE_TYPE_THEME => 'public/themes/'
+    ];
 
     /**
      * {@inheritDoc}
      */
     public function getInstallPath(PackageInterface $package)
     {
-        $type = $package->getType();
-        $locations = $this->getPackageLocations();
         $extra = $package->getExtra();
-
-        // Normal composer package.
-        if (!isset($locations[$type])) {
-            return parent::getInstallPath($package);
-        }
-
         if (empty($extra['name'])) {
             throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
         }
 
+        $type = $package->getType();
         $name = $extra['name'];
         if ($type != self::PACKAGE_TYPE_THEME) {
             $name = ucfirst($name);
         }
 
-        return $locations[$type] . '/' . $name;
+        return $this->packages[$type] . '/' . $name;
     }
 
     /**
@@ -104,7 +92,6 @@ class Installer extends LibraryInstaller
         parent::install($repo, $package);
 
         $extra = $package->getExtra();
-
         if (empty($extra['name'])) {
             throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
         }
@@ -129,13 +116,11 @@ class Installer extends LibraryInstaller
 
         $extra = $package->getExtra();
 
-        if (empty($extra['name'])) {
-            throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
+        if (!empty($extra['name'])) {
+            $config = new Config();
+            $config->remove($extra['name'], $package->getType());
+            $config->save();
         }
-
-        $config = new Config();
-        $config->remove($extra['name'], $package->getType());
-        $config->save();
     }
 
     /**
@@ -143,6 +128,6 @@ class Installer extends LibraryInstaller
      */
     public function supports($packageType)
     {
-        return true;
+        return isset($this->packages[$packageType]);
     }
 }
