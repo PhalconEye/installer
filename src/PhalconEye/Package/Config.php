@@ -61,6 +61,7 @@ class Config
      */
     public function add($name, $type)
     {
+        $type = $this->_normalizeType($type);
         $this->_config[$type][] = $name;
     }
 
@@ -72,6 +73,7 @@ class Config
      */
     public function remove($name, $type)
     {
+        $type = $this->_normalizeType($type);
         if (!isset($this->_config[$type])) {
             return;
         }
@@ -111,7 +113,20 @@ class Config
     private function _toString()
     {
         $configText = var_export($this->_config, true);
-        $headerText = '<?php' . PHP_EOL;
+        $headerText = '<?php' . PHP_EOL . 'return ';
         return $headerText . $configText . ';';
+    }
+
+    /**
+     * Convert type to cms type.
+     *
+     * @param string $type Composer type name.
+     *
+     * @return string CMS type name.
+     */
+    private function _normalizeType($type)
+    {
+        $typeParams = explode('-', $type);
+        return $typeParams[1];
     }
 }
