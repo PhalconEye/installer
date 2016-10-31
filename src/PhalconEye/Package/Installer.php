@@ -104,7 +104,7 @@ class Installer extends LibraryInstaller
         parent::install($repo, $package);
 
         $extra = $package->getExtra();
-        $config = new Config();
+        $config = new Config($package->getTargetDir() . '/../');
         $config->add($extra['name'], $package->getType());
         $config->save();
     }
@@ -123,7 +123,7 @@ class Installer extends LibraryInstaller
         $this->io->write(sprintf('Deleting %s - %s', $installPath, $this->filesystem->removeDirectory($installPath) ? '<comment>deleted</comment>' : '<error>not deleted</error>'));
 
         $extra = $package->getExtra();
-        $config = new Config();
+        $config = new Config($package->getTargetDir() . '/../');
         $config->remove($extra['name'], $package->getType());
         $config->save();
     }

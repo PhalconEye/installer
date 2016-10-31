@@ -46,10 +46,12 @@ class Config
 
     /**
      * Config constructor.
+     *
+     * @param string $basePath Base path.
      */
-    public function __construct()
+    public function __construct($basePath)
     {
-        $this->_configPath = sprintf(self::PACKAGE_CONFIG_PATH, $this->_getEnvironment());
+        $this->_configPath = $basePath . sprintf(self::PACKAGE_CONFIG_PATH, $this->_getEnvironment());
         $this->_config = include $this->_configPath;
     }
 
