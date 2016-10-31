@@ -34,7 +34,7 @@ class Config
         /**
          * Packages config location.
          */
-        PACKAGE_CONFIG_PATH = 'config/%/packages.php',
+        PACKAGE_CONFIG_PATH = 'config/%s/packages.php',
 
         /**
          * Default phalcon eye environment.
@@ -46,12 +46,10 @@ class Config
 
     /**
      * Config constructor.
-     *
-     * @param string $basePath Base path.
      */
-    public function __construct($basePath)
+    public function __construct()
     {
-        $this->_configPath = $basePath . sprintf(self::PACKAGE_CONFIG_PATH, $this->_getEnvironment());
+        $this->_configPath = sprintf(self::PACKAGE_CONFIG_PATH, $this->_getEnvironment());
         $this->_config = include $this->_configPath;
     }
 

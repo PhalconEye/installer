@@ -104,7 +104,12 @@ class Installer extends LibraryInstaller
         parent::install($repo, $package);
 
         $extra = $package->getExtra();
-        $config = new Config($package->getTargetDir() . '/../');
+
+        if (empty($extra['name'])) {
+            throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
+        }
+
+        $config = new Config();
         $config->add($extra['name'], $package->getType());
         $config->save();
     }
@@ -123,7 +128,12 @@ class Installer extends LibraryInstaller
         $this->io->write(sprintf('Deleting %s - %s', $installPath, $this->filesystem->removeDirectory($installPath) ? '<comment>deleted</comment>' : '<error>not deleted</error>'));
 
         $extra = $package->getExtra();
-        $config = new Config($package->getTargetDir() . '/../');
+
+        if (empty($extra['name'])) {
+            throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
+        }
+
+        $config = new Config();
         $config->remove($extra['name'], $package->getType());
         $config->save();
     }
