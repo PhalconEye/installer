@@ -3,7 +3,7 @@
   +------------------------------------------------------------------------+
   | PhalconEye CMS                                                         |
   +------------------------------------------------------------------------+
-  | Copyright (c) 2013-2014 PhalconEye Team (http://phalconeye.com/)       |
+  | Copyright (c) 2013-2016 PhalconEye Team (http://phalconeye.com/)       |
   +------------------------------------------------------------------------+
   | This source file is subject to the New BSD License that is bundled     |
   | with this package in the file LICENSE.txt.                             |
@@ -12,7 +12,7 @@
   | obtain it through the world-wide-web, please send an email             |
   | to license@phalconeye.com so we can send you a copy immediately.       |
   +------------------------------------------------------------------------+
-  | Author: Ivan Vorontsov <ivan.vorontsov@phalconeye.com>                 |
+  | Author: Ivan Vorontsov <lantian.ivan@gmail.com>                        |
   +------------------------------------------------------------------------+
 */
 
@@ -28,18 +28,13 @@ use Composer\Repository\InstalledRepositoryInterface;
  * @category  PhalconEye
  * @package   Engine\Composer
  * @author    Ivan Vorontsov <ivan.vorontsov@phalconeye.com>
- * @copyright 2013-2014 PhalconEye Team
+ * @copyright 2013-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
 class Installer extends LibraryInstaller
 {
     const
-        /**
-         * The alfa and the omega!
-         */
-        PACKAGE_TYPE_FRAMEWORK = 'phalconeye-framework',
-
         /**
          * Module package.
          */
@@ -58,18 +53,7 @@ class Installer extends LibraryInstaller
         /**
          * Widget package.
          */
-        PACKAGE_TYPE_WIDGET = 'phalconeye-widget',
-
-        /**
-         * Library package.
-         */
-        PACKAGE_TYPE_UI_LIBRARY = 'phalconeye-ui-library';
-
-    const
-        /**
-         * Composer project config option in "extra" section.
-         */
-        CONFIG_EXTRA_UI_LIBRARIES = 'ui-libraries';
+        PACKAGE_TYPE_WIDGET = 'phalconeye-widget';
 
     /**
      * Get package locations array.
@@ -79,11 +63,9 @@ class Installer extends LibraryInstaller
     public function getPackageLocations()
     {
         return [
-            self::PACKAGE_TYPE_FRAMEWORK => 'app/engine/',
             self::PACKAGE_TYPE_MODULE => 'app/modules/',
             self::PACKAGE_TYPE_PLUGIN => 'app/plugins/',
             self::PACKAGE_TYPE_WIDGET => 'app/widgets/',
-            self::PACKAGE_TYPE_UI_LIBRARY => 'public/ui/',
             self::PACKAGE_TYPE_THEME => 'public/themes/'
         ];
     }
@@ -99,17 +81,7 @@ class Installer extends LibraryInstaller
 
         // Normal composer package.
         if (!isset($locations[$type])) {
-            // Check ui libraries.
-            $projectExtra = $this->composer->getPackage()->getExtra();
-            if (
-                isset($projectExtra[self::CONFIG_EXTRA_UI_LIBRARIES]) &&
-                !empty($projectExtra[self::CONFIG_EXTRA_UI_LIBRARIES][$package->getPrettyName()])
-            ) {
-                $type = self::PACKAGE_TYPE_UI_LIBRARY;
-                $extra['name'] = $projectExtra[self::CONFIG_EXTRA_UI_LIBRARIES][$package->getPrettyName()];
-            } else {
-                return parent::getInstallPath($package);
-            }
+            return parent::getInstallPath($package);
         }
 
         if (empty($extra['name'])) {
@@ -117,14 +89,24 @@ class Installer extends LibraryInstaller
         }
 
         $name = $extra['name'];
-        if (
-            $type != self::PACKAGE_TYPE_UI_LIBRARY &&
-            $type != self::PACKAGE_TYPE_THEME
-        ) {
+        if ($type != self::PACKAGE_TYPE_THEME) {
             $name = ucfirst($name);
         }
 
         return $locations[$type] . '/' . $name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
+    {
+        parent::install($repo, $package);
+
+        $extra = $package->getExtra();
+        $config = new Config();
+        $config->add($extra['name'], $package->getType());
+        $config->save();
     }
 
     /**
@@ -139,6 +121,11 @@ class Installer extends LibraryInstaller
         $repo->removePackage($package);
         $installPath = $this->getInstallPath($package);
         $this->io->write(sprintf('Deleting %s - %s', $installPath, $this->filesystem->removeDirectory($installPath) ? '<comment>deleted</comment>' : '<error>not deleted</error>'));
+
+        $extra = $package->getExtra();
+        $config = new Config();
+        $config->remove($extra['name'], $package->getType());
+        $config->save();
     }
 
     /**
