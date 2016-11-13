@@ -62,7 +62,7 @@ class Installer extends LibraryInstaller
         self::PACKAGE_TYPE_MODULE => 'app/modules/',
         self::PACKAGE_TYPE_PLUGIN => 'app/plugins/',
         self::PACKAGE_TYPE_WIDGET => 'app/widgets/',
-        self::PACKAGE_TYPE_THEME => 'public/themes/'
+        self::PACKAGE_TYPE_THEME => 'app/themes/'
     ];
 
     /**
