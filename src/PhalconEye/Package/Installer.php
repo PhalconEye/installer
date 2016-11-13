@@ -75,13 +75,7 @@ class Installer extends LibraryInstaller
             throw new \InvalidArgumentException('Package extra data is missing. Extra property "name" is required.');
         }
 
-        $type = $package->getType();
-        $name = $extra['name'];
-        if ($type != self::PACKAGE_TYPE_THEME) {
-            $name = ucfirst($name);
-        }
-
-        return $this->packages[$type] . '/' . $name;
+        return $this->packages[$package->getType()] . '/' . ucfirst($extra['name']);
     }
 
     /**
@@ -97,7 +91,7 @@ class Installer extends LibraryInstaller
         }
 
         $config = new Config();
-        $config->add($extra['name'], $package->getType());
+        $config->add(ucfirst($extra['name']), $package->getType());
         $config->save();
     }
 
@@ -118,7 +112,7 @@ class Installer extends LibraryInstaller
 
         if (!empty($extra['name'])) {
             $config = new Config();
-            $config->remove($extra['name'], $package->getType());
+            $config->remove(ucfirst($extra['name']), $package->getType());
             $config->save();
         }
     }
